@@ -7,4 +7,5 @@ public interface OffersService {
     List<Offer> getAllOffers();
     Offer getOfferById(long id);
     boolean addOffer(Offer newOffer);
+    boolean deleteOffer(long id);
 }

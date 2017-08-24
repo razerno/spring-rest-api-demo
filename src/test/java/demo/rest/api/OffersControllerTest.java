@@ -19,6 +19,7 @@ import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -105,5 +106,21 @@ public class OffersControllerTest {
         this.mockMvc.perform(get("/offers/{id}", 1))
                 .andExpect(status().isNotFound());
         verify(offersService, times(1)).getOfferById(1);
+    }
+
+    @Test
+    public void deleteWithIdShouldDeleteSpecificOffer() throws Exception {
+        when(offersService.deleteOffer(1)).thenReturn(true);
+        this.mockMvc.perform(delete("/offers/{id}", 1))
+                .andExpect(status().isOk());
+        verify(offersService, times(1)).deleteOffer(1);
+    }
+
+    @Test
+    public void deleteWithIdShouldGiveNotFoundIfOfferDoesNotExist() throws Exception {
+        when(offersService.deleteOffer(1)).thenReturn(false);
+        this.mockMvc.perform(delete("/offers/{id}", 1))
+                .andExpect(status().isNotFound());
+        verify(offersService, times(1)).deleteOffer(1);
     }
 }

@@ -12,6 +12,7 @@ import java.net.URI;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 
+import static org.springframework.web.bind.annotation.RequestMethod.DELETE;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
@@ -57,5 +58,15 @@ public class OffersController {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(offer);
+    }
+
+    @RequestMapping(value = "{id}", method = DELETE)
+    public ResponseEntity<Void> deleteOffer(@PathVariable long id) {
+        boolean deleted = offersService.deleteOffer(id);
+
+        if (deleted) {
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.notFound().build();
     }
 }

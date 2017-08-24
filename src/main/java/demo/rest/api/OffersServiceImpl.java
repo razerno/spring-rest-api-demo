@@ -29,4 +29,14 @@ public class OffersServiceImpl implements OffersService {
     public boolean addOffer(Offer newOffer) {
         return offers.add(newOffer);
     }
+
+    @Override
+    public boolean deleteOffer(long id) {
+        for (Offer offer : offers) {
+            if (offer.getId() == id) {
+                return offers.remove(offer);
+            }
+        }
+        return false;
+    }
 }

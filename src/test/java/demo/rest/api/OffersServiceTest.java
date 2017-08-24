@@ -3,10 +3,12 @@ package demo.rest.api;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 public class OffersServiceTest {
@@ -36,5 +38,25 @@ public class OffersServiceTest {
         assertTrue(offersService.addOffer(offer1));
         assertTrue(offersService.addOffer(offer2));
         assertEquals(offersService.getAllOffers(), offers);
+    }
+
+    @Test
+    public void testGetOfferDoesNotExist() {
+        assertEquals(offersService.getAllOffers(), new ArrayList<Offer>());
+        assertEquals(offersService.getOfferById(1), null);
+    }
+
+    @Test
+    public void testDeleteOffer() {
+        Offer newOffer = new Offer(1, "A simple offer", 50, "GBP");
+
+        assertTrue(offersService.addOffer(newOffer));
+        assertTrue(offersService.deleteOffer(1));
+        assertEquals(offersService.getOfferById(1), null);
+    }
+
+    @Test
+    public void testDeleteOfferDoesNotExist() {
+        assertFalse(offersService.deleteOffer(1));
     }
 }
