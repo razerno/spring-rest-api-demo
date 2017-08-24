@@ -39,4 +39,16 @@ public class OffersServiceImpl implements OffersService {
         }
         return false;
     }
+
+    @Override
+    public Offer updateOffer(Offer updatedOffer) {
+        for (Offer offer : offers) {
+            if (offer.getId() == updatedOffer.getId()) {
+                offers.remove(offer);
+                offers.add(updatedOffer);
+                return updatedOffer;
+            }
+        }
+        return null;
+    }
 }

@@ -19,9 +19,7 @@ import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -122,5 +120,36 @@ public class OffersControllerTest {
         this.mockMvc.perform(delete("/offers/{id}", 1))
                 .andExpect(status().isNotFound());
         verify(offersService, times(1)).deleteOffer(1);
+    }
+
+    @Test
+    public void putWithIdShouldUpdateSpecificOffer() throws Exception {
+        OfferInfo newOfferInfo = new OfferInfo("A simple offer", 50, "GBP");
+        Offer offer = new Offer(1, "A simple offer", 50, "GBP");
+
+        when(offersService.updateOffer(offer)).thenReturn(offer);
+        this.mockMvc.perform(put("/offers/{id}", 1)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(newOfferInfo)))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+                .andExpect(jsonPath("$.id", is(1)))
+                .andExpect(jsonPath("$.description", is("A simple offer")))
+                .andExpect(jsonPath("$.price", is(50)))
+                .andExpect(jsonPath("$.currency", is("GBP")));
+        verify(offersService, times(1)).updateOffer(offer);
+    }
+
+    @Test
+    public void putWithIdShouldGiveNotFoundIfOfferDoesNotExist() throws Exception {
+        OfferInfo newOfferInfo = new OfferInfo("A simple offer", 50, "GBP");
+        Offer offer = new Offer(1, "A simple offer", 50, "GBP");
+
+        when(offersService.updateOffer(offer)).thenReturn(null);
+        this.mockMvc.perform(put("/offers/{id}", 1)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(newOfferInfo)))
+                .andExpect(status().isNotFound());
+        verify(offersService, times(1)).updateOffer(offer);
     }
 }

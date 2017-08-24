@@ -8,4 +8,5 @@ public interface OffersService {
     Offer getOfferById(long id);
     boolean addOffer(Offer newOffer);
     boolean deleteOffer(long id);
+    Offer updateOffer(Offer updatedOffer);
 }

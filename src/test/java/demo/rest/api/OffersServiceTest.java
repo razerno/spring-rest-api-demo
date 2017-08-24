@@ -59,4 +59,21 @@ public class OffersServiceTest {
     public void testDeleteOfferDoesNotExist() {
         assertFalse(offersService.deleteOffer(1));
     }
+
+    @Test
+    public void testUpdateOffer() {
+        Offer newOffer = new Offer(1, "Initial Offer", 10, "GBP");
+        Offer updatedOffer = new Offer(1, "Updated Offer", 20, "USD");
+
+        assertTrue(offersService.addOffer(newOffer));
+        assertEquals(offersService.updateOffer(updatedOffer), updatedOffer);
+        assertEquals(offersService.getOfferById(1), updatedOffer);
+    }
+
+    @Test
+    public void testUpdateOfferDoesNotExist() {
+        Offer updatedOffer = new Offer(1, "Updated Offer", 20, "USD");
+
+        assertEquals(offersService.updateOffer(updatedOffer), null);
+    }
 }
