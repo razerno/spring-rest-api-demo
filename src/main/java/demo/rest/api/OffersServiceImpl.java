@@ -8,7 +8,7 @@ import java.util.List;
 @Service
 public class OffersServiceImpl implements OffersService {
 
-    private static List<Offer> offers = new ArrayList<>();
+    private List<Offer> offers = new ArrayList<>();
 
     @Override
     public List<Offer> getAllOffers() {

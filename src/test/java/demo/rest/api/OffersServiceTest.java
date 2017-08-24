@@ -1,35 +1,40 @@
 package demo.rest.api;
 
+import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.context.annotation.Bean;
-import org.springframework.test.context.junit4.SpringRunner;
+
+import java.util.Arrays;
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-@RunWith(SpringRunner.class)
 public class OffersServiceTest {
 
-    @TestConfiguration
-    static class OffersServiceImplTestContextConfig {
-
-        @Bean
-        public OffersService offersService() {
-            return new OffersServiceImpl();
-        }
-    }
-
-    @Autowired
     private OffersService offersService;
+
+    @Before
+    public void setUp() {
+        offersService = new OffersServiceImpl();
+    }
 
     @Test
     public void testGetAndAddOffer() {
         Offer newOffer = new Offer(1, "A simple offer", 50, "GBP");
+
         assertTrue(offersService.getAllOffers().isEmpty());
         assertTrue(offersService.addOffer(newOffer));
         assertEquals(offersService.getOfferById(1), newOffer);
+    }
+
+    @Test
+    public void testGetAllOffers() {
+        Offer offer1 = new Offer(1,"First offer", 10, "GBP");
+        Offer offer2 = new Offer(2,"Second offer", 20, "USD");
+        List<Offer> offers = Arrays.asList(offer1, offer2);
+
+        assertTrue(offersService.addOffer(offer1));
+        assertTrue(offersService.addOffer(offer2));
+        assertEquals(offersService.getAllOffers(), offers);
     }
 }

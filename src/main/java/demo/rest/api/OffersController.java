@@ -2,17 +2,21 @@ package demo.rest.api;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 @RestController
+@RequestMapping(path = "/offers")
 public class OffersController {
 
     @Autowired
@@ -20,7 +24,7 @@ public class OffersController {
 
     private final AtomicLong counter = new AtomicLong();
 
-    @RequestMapping(path="/offers", method=POST)
+    @RequestMapping(method = POST)
     public ResponseEntity<Void> addOffer(@RequestBody OfferInfo info) {
         long id = counter.incrementAndGet();
         Offer newOffer = new Offer(id, info);
@@ -39,4 +43,13 @@ public class OffersController {
         }
     }
 
+    @RequestMapping(method = GET)
+    public List<Offer> getAllOffers() {
+        return offersService.getAllOffers();
+    }
+
+    @RequestMapping(value = "{id}", method = GET)
+    public Offer getOffer(@PathVariable long id) {
+        return offersService.getOfferById(id);
+    }
 }
