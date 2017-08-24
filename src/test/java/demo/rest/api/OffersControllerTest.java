@@ -10,6 +10,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -74,6 +75,16 @@ public class OffersControllerTest {
     }
 
     @Test
+    public void getShouldGiveNoContentIfNoOffersExist() throws Exception {
+        List<Offer> emptyList = new ArrayList<>();
+
+        when(offersService.getAllOffers()).thenReturn(emptyList);
+        this.mockMvc.perform(get("/offers"))
+                .andExpect(status().isNoContent());
+        verify(offersService, times(1)).getAllOffers();
+    }
+
+    @Test
     public void getWithIdShouldGetSpecificOffer() throws Exception {
         Offer offer = new Offer(1, "A simple offer", 50, "GBP");
 
@@ -85,6 +96,14 @@ public class OffersControllerTest {
                 .andExpect(jsonPath("$.description", is("A simple offer")))
                 .andExpect(jsonPath("$.price", is(50)))
                 .andExpect(jsonPath("$.currency", is("GBP")));
+        verify(offersService, times(1)).getOfferById(1);
+    }
+
+    @Test
+    public void getWithIdShouldGiveNotFoundIfOfferDoesNotExist() throws Exception {
+        when(offersService.getOfferById(1)).thenReturn(null);
+        this.mockMvc.perform(get("/offers/{id}", 1))
+                .andExpect(status().isNotFound());
         verify(offersService, times(1)).getOfferById(1);
     }
 }

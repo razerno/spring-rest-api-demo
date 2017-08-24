@@ -38,18 +38,24 @@ public class OffersController {
                     .buildAndExpand(id).toUri();
             return ResponseEntity.created(location).build();
         }
-        else {
-            return ResponseEntity.noContent().build();
-        }
+        return ResponseEntity.noContent().build();
     }
 
     @RequestMapping(method = GET)
-    public List<Offer> getAllOffers() {
-        return offersService.getAllOffers();
+    public ResponseEntity<List<Offer>> getAllOffers() {
+        List<Offer> offers = offersService.getAllOffers();
+        if (offers == null || offers.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(offers);
     }
 
     @RequestMapping(value = "{id}", method = GET)
-    public Offer getOffer(@PathVariable long id) {
-        return offersService.getOfferById(id);
+    public ResponseEntity<Offer> getOffer(@PathVariable long id) {
+        Offer offer = offersService.getOfferById(id);
+        if (offer == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(offer);
     }
 }
