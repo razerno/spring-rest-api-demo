@@ -1,4 +1,4 @@
-# Spring REST API Demo
+# Spring REST API Demo [![Build Status](https://travis-ci.org/razerno/spring-rest-api-demo.svg?branch=master)](https://travis-ci.org/razerno/spring-rest-api-demo)
 A simple Java application built using Spring Boot serving a RESTful API with which to add and maintain offers. The build is managed using Gradle and includes a pre-built wrapper.
 
 The API provides an /offers endpoint to modify offers. The following methods are accepted:
